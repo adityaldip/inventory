@@ -96,28 +96,157 @@ curl -X POST http://your-domain/api/v1/posts \
 -d '{
 "title": "Test Post",
 "content": "Content here",
-"tags": []
+"tags": ["technology", "news"]
 }'
-bash
+
+Example Response:
+```json
+{
+    "data": {
+        "id": "uuid-here",
+        "title": "Test Post",
+        "content": "Content here",
+        "slug": "test-post",
+        "tags": [
+            {
+                "id": "tag-uuid",
+                "name": "technology"
+            },
+            {
+                "id": "tag-uuid",
+                "name": "news"
+            }
+        ],
+        "created_at": "2024-01-14T00:00:00.000000Z",
+        "updated_at": "2024-01-14T00:00:00.000000Z"
+    }
+}
+```
+
+### Create a Product
+```bash
 curl -X POST http://your-domain/api/v1/products \
--H "Accept: application/json" \
--H "Content-Type: application/json" \
--d '{
-"name": "Product Name",
-"price": 99.99,
-"unit": "pcs",
-"quantity": 100,
-"tags": []
-}'
-bash
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Product Name",
+    "price": 99.99,
+    "unit": "pcs",
+    "quantity": 100,
+    "tags": ["electronics", "featured"]
+  }'
+```
+
+Example Response:
+```json
+{
+    "data": {
+        "id": "uuid-here",
+        "name": "Product Name",
+        "price": "99.99",
+        "unit": "pcs",
+        "quantity": 100,
+        "tags": [
+            {
+                "id": "tag-uuid",
+                "name": "electronics"
+            },
+            {
+                "id": "tag-uuid",
+                "name": "featured"
+            }
+        ],
+        "created_at": "2024-01-14T00:00:00.000000Z",
+        "updated_at": "2024-01-14T00:00:00.000000Z"
+    }
+}
+```
+
+### Upload Image
+```bash
 curl -X POST http://your-domain/api/v1/images \
--H "Accept: application/json" \
--F "image=@/path/to/image.jpg" \
--F "type=product" \
--F "id=product-uuid-here"
-bash
+  -H "Accept: application/json" \
+  -F "image=@/path/to/image.jpg" \
+  -F "type=product" \
+  -F "id=product-uuid-here"
+```
+
+Example Response:
+```json
+{
+    "data": {
+        "id": "uuid-here",
+        "filename": "unique-filename.jpg",
+        "full_path": "https://your-s3-bucket.s3.region.amazonaws.com/images/unique-filename.jpg",
+        "mime_type": "image/jpeg",
+        "size": 1024,
+        "created_at": "2024-01-14T00:00:00.000000Z",
+        "updated_at": "2024-01-14T00:00:00.000000Z"
+    }
+}
+```
+
+### Start Bulk Import
+```bash
 curl -X POST http://your-domain/api/v1/imports \
--H "Accept: application/json" \
--F "file=@/path/to/products.csv"
-bash
-php artisan test
+  -H "Accept: application/json" \
+  -F "file=@/path/to/products.csv"
+```
+
+Example Response:
+```json
+{
+    "message": "Import started successfully",
+    "import_id": "import_65a123456789"
+}
+```
+
+### Check Import Progress
+```bash
+curl -X GET http://your-domain/api/v1/imports/import_65a123456789/progress \
+  -H "Accept: application/json"
+```
+
+Example Response:
+```json
+{
+    "total": 100,
+    "processed": 45,
+    "percentage": 45.00,
+    "completed": false
+}
+```
+
+### Search Products
+```bash
+curl -X GET "http://your-domain/api/v1/search/products?search=electronics&min_price=10&max_price=100&in_stock=true" \
+  -H "Accept: application/json"
+```
+
+Example Response:
+```json
+{
+    "data": [
+        {
+            "id": "uuid-here",
+            "name": "Electronic Product",
+            "price": "99.99",
+            "unit": "pcs",
+            "quantity": 100,
+            "tags": [
+                {
+                    "id": "tag-uuid",
+                    "name": "electronics"
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "per_page": 10,
+        "total": 1
+    }
+}
+```
