@@ -29,7 +29,7 @@ A Laravel-based REST API for managing inventory, posts, and transactions with su
 
 bash
 git clone https://github.com/adityaldip/inventory.git
-cd inventory-system
+cd inventory
 bash
 composer install
 bash
