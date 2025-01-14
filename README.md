@@ -89,7 +89,7 @@ sudo supervisorctl start laravel-worker:
 
 ### Create a Post
 
-bash
+```bash
 curl -X POST http://your-domain/api/v1/posts \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
@@ -98,6 +98,7 @@ curl -X POST http://your-domain/api/v1/posts \
 "content": "Content here",
 "tags": ["technology", "news"]
 }'
+```
 
 Example Response:
 ```json
