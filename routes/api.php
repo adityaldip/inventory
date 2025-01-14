@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\ImportController;
 use Illuminate\Support\Facades\Route;
 
 // API Routes
@@ -31,4 +32,8 @@ Route::prefix('v1')->group(function () {
     Route::delete('images/{image}', [ImageController::class, 'destroy']);
 
     Route::apiResource('transactions', TransactionController::class)->except(['update', 'destroy']);
+
+    // Import routes
+    Route::post('imports', [ImportController::class, 'store']);
+    Route::get('imports/{importId}/progress', [ImportController::class, 'progress']);
 });

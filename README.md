@@ -1,66 +1,123 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Inventory Management System API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based REST API for managing inventory, posts, and transactions with support for image uploads, tagging, and bulk imports.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- 🏷️ Polymorphic Relations (Tags & Images)
+- 📦 Product Management
+- 📝 Post Management
+- 🔄 Transaction Processing
+- 🖼️ S3 Image Storage
+- 📨 Background Email Processing
+- 🔍 Advanced Search Functionality
+- 📥 Bulk Data Import (800k+ rows)
+- 🔒 Race Condition Prevention
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.1+
+- MySQL 8.0+
+- Composer
+- Redis (for queues)
+- AWS S3 or Compatible Storage
+- Supervisor
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Clone the repository
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+bash
+git clone https://github.com/yourusername/inventory-system.git
+cd inventory-system
+bash
+composer install
+bash
+cp .env.example .env
+bash
+php artisan key:generate
+bash
+php artisan migrate --seed
+bash
+php artisan storage:link
+bash
+sudo apt-get install supervisor
+bash
+sudo nano /etc/supervisor/conf.d/laravel-worker.conf
+bash
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start laravel-worker:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## API Endpoints
 
-## Laravel Sponsors
+### Posts
+- `GET /api/v1/posts` - List all posts
+- `POST /api/v1/posts` - Create a post
+- `GET /api/v1/posts/{id}` - Get single post
+- `PUT /api/v1/posts/{id}` - Update post
+- `DELETE /api/v1/posts/{id}` - Delete post
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Products
+- `GET /api/v1/products` - List all products
+- `POST /api/v1/products` - Create a product
+- `GET /api/v1/products/{id}` - Get single product
+- `PUT /api/v1/products/{id}` - Update product
+- `DELETE /api/v1/products/{id}` - Delete product
 
-### Premium Partners
+### Transactions
+- `GET /api/v1/transactions` - List all transactions
+- `POST /api/v1/transactions` - Create a transaction
+- `GET /api/v1/transactions/{id}` - Get single transaction
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Images
+- `POST /api/v1/images` - Upload image
+- `DELETE /api/v1/images/{id}` - Delete image
 
-## Contributing
+### Tags
+- `GET /api/v1/tags` - List all tags
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Search
+- `GET /api/v1/search/posts` - Search posts
+- `GET /api/v1/search/products` - Search products
 
-## Code of Conduct
+### Bulk Import
+- `POST /api/v1/imports` - Start bulk import
+- `GET /api/v1/imports/{importId}/progress` - Check import progress
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Example Requests
 
-## Security Vulnerabilities
+### Create a Post
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+bash
+curl -X POST http://your-domain/api/v1/posts \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-d '{
+"title": "Test Post",
+"content": "Content here",
+"tags": []
+}'
+bash
+curl -X POST http://your-domain/api/v1/products \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-d '{
+"name": "Product Name",
+"price": 99.99,
+"unit": "pcs",
+"quantity": 100,
+"tags": []
+}'
+bash
+curl -X POST http://your-domain/api/v1/images \
+-H "Accept: application/json" \
+-F "image=@/path/to/image.jpg" \
+-F "type=product" \
+-F "id=product-uuid-here"
+bash
+curl -X POST http://your-domain/api/v1/imports \
+-H "Accept: application/json" \
+-F "file=@/path/to/products.csv"
+bash
+php artisan test
