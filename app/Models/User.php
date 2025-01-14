@@ -6,10 +6,11 @@ use App\Traits\HasUuid;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasUuid, Notifiable;
+    use HasApiTokens, HasUuid, Notifiable, HasFactory;
 
     protected $fillable = [
         'first_name',

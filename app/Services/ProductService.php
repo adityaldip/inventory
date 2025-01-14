@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
@@ -16,23 +17,29 @@ class ProductService
             ->paginate($perPage);
     }
 
-    public function createProduct(array $data): Product
+    public function createProduct(array $data)
     {
-        // Get the first user as default
-        $defaultUser = User::first();
-        if (!$defaultUser) {
-            throw new \Exception('No default user found. Please run UserSeeder first.');
-        }
-        
-        $data['created_by_id'] = $defaultUser->id;
-        
-        $product = Product::create($data);
+        return DB::transaction(function () use ($data) {
+            $user = User::first() ?? User::factory()->create([
+                'email' => 'default@example.com',
+                'password' => bcrypt('password'),
+            ]);
 
-        if (isset($data['tags'])) {
-            $product->tags()->sync($data['tags']);
-        }
+            $product = Product::create([
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'price' => $data['price'],
+                'unit' => $data['unit'],
+                'quantity' => $data['quantity'],
+                'created_by_id' => $user->id,
+            ]);
 
-        return $product->load(['createdBy', 'tags', 'images']);
+            if (isset($data['tags'])) {
+                $product->tags()->attach($data['tags']);
+            }
+
+            return $product;
+        });
     }
 
     public function updateProduct(Product $product, array $data): Product

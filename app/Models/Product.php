@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Product extends Model
 {
-    use HasUuid;
+    use HasUuid, HasFactory;
 
     protected $fillable = [
         'name',
