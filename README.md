@@ -28,7 +28,7 @@ A Laravel-based REST API for managing inventory, posts, and transactions with su
 1. Clone the repository
 
 bash
-git clone https://github.com/yourusername/inventory-system.git
+git clone https://github.com/adityaldip/inventory.git
 cd inventory-system
 bash
 composer install
